@@ -4,8 +4,8 @@
     <el-upload
       class="upload-demo"
       drag
-      action="https://jsonplaceholder.typicode.com/posts/"
-      multiple
+      action="/api/Tool/imgupload"
+      :on-success="imgSuccess"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :file-list="fileList"
@@ -19,23 +19,34 @@
 </template>
 <script>
 export default {
+  props: {
+    value: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
-      fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]
+      fileList: []
     }
   },
   methods: {
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      this.fileList = []
     },
     handlePreview(file) {
       console.log(file)
     },
-    handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
+    imgSuccess(response) {
+      // console.log(response)
+      // console.log(response.data.imageUrl)
+      if (response.data && response.data.imageUrl) {
+        const Img = response.data.url
+        console.log(Img)
+        // this.fileList = [{ name: response.data.url, url: response.data.imageUrl }]
+        // 将图像URL传递给父组件
+        this.$emit('input', Img)
+      }
     }
   }
 }

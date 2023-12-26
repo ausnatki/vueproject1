@@ -11,14 +11,14 @@
         <el-input v-model="form.email" :class="['input-box']" />
       </el-form-item>
       <el-form-item label="上传图片">
-        <uploadimag />
+        <uploadimag v-model="form.img" />
       </el-form-item>
       <el-form-item label="设置密码" prop="password">
         <el-input v-model="form.password" type="password" :class="['input-box']" />
         <span>默认为123456</span>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm">立即创建</el-button>
+        <el-button type="primary" @click="submitForm()">立即创建</el-button>
         <el-button>取消</el-button>
       </el-form-item>
     </el-form>
@@ -26,12 +26,14 @@
 </template>
 <script>
 import Uploadimag from '@/views/usermanager/components/Uploadimg.vue'
+import { Add } from '@/api/user'
 
 export default {
   name: 'UserForm',
   components: {
     Uploadimag
   },
+  props: [],
   data() {
     var checkEmail = (rule, value, callback) => {
       const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
@@ -51,7 +53,8 @@ export default {
         name: '',
         iphone: '',
         email: '',
-        password: '123456'
+        password: '123456',
+        img: ''
       },
       rules: {
         name: [
@@ -76,8 +79,15 @@ export default {
     submitForm() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          console.log(valid)
-          alert('submit!')
+          // alert('submit!')
+          Add(this.form).then(result => {
+            console.log(result)
+            this.$message({
+              message: result.message,
+              type: 'success'
+            })
+            this.$refs.form.resetFields()
+          })
         } else {
           console.log('error submit!!')
           return false

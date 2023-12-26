@@ -1,47 +1,49 @@
 <template>
-  <el-table
-    :data="dataTable.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-    style="width: 100%"
-  >
-    <el-table-column
-      label="ID"
-      prop="uid"
-    />
-    <el-table-column
-      label="电话"
-      prop="iphone"
-    />
-    <el-table-column
-      label="邮箱"
-      prop="email"
-    />
-    <el-table-column
-      label="Name"
-      prop="name"
-    />
-    <el-table-column
-      align="right"
+  <div class="main-box">
+    <el-table
+      :data="dataTable.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+      style="width: 100%;"
     >
-      <template slot="header">
-        <el-input
-          v-model="search"
-          size="mini"
-          placeholder="输入关键字搜索"
-        />
-      </template>
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleEdit(scope.$index, scope.row)"
-        >Edit</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)"
-        >Delete</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+      <el-table-column
+        label="ID"
+        prop="uid"
+      />
+      <el-table-column
+        label="电话"
+        prop="iphone"
+      />
+      <el-table-column
+        label="邮箱"
+        prop="email"
+      />
+      <el-table-column
+        label="Name"
+        prop="name"
+      />
+      <el-table-column
+        align="right"
+      >
+        <template slot="header">
+          <el-input
+            v-model="search"
+            size="mini"
+            placeholder="输入关键字搜索"
+          />
+        </template>
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)"
+          >Edit</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)"
+          >Delete</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script>
@@ -74,3 +76,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+    .main-box{
+        padding: 10px;
+    }
+
+</style>

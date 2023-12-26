@@ -29,3 +29,11 @@ export function getAll() {
     method: 'get'
   })
 }
+
+export function Add(data) {
+  return request({
+    url: '/api/SysUser/Add',
+    method: 'post',
+    data
+  })
+}

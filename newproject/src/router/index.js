@@ -170,7 +170,7 @@ export const asyncRoutes = [
     name: 'UserManage',
     meta: {
       title: '用户管理',
-      icon: 'shopping',
+      icon: 'user',
       roles: ['admin', 'editor']
     },
     children: [{
@@ -178,8 +178,8 @@ export const asyncRoutes = [
       component: () => import('@/views/usermanager/userlist'),
       name: 'UserList',
       meta: {
-        title: '商品列表',
-        icon: 'guide',
+        title: '用户列表',
+        icon: 'list',
         noCache: true,
         roles: ['admin', 'editor']
       }
@@ -190,7 +190,7 @@ export const asyncRoutes = [
       name: 'Userform',
       meta: {
         title: '用户添加',
-        icon: 'guide',
+        icon: 'form',
         noCache: true,
         roles: ['admin']
       }
