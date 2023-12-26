@@ -7,3 +7,12 @@ export function getAll() {
     method: 'get'
   })
 }
+
+// 创建一个比赛信息
+export function CreateCompete(data) {
+  return request({
+    url: '/api/Compete/Create_Compete',
+    method: 'post',
+    data
+  })
+}

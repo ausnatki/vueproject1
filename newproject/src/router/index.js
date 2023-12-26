@@ -229,6 +229,17 @@ export const asyncRoutes = [
         noCache: true,
         roles: ['admin']
       }
+    },
+    {
+      path: 'tablelist',
+      component: () => import('@/views/compete/compete-table-list'),
+      name: 'CompeteTableList',
+      meta: {
+        title: '比赛表格',
+        icon: 'el-icon-s-claim',
+        noCache: true,
+        roles: ['admin']
+      }
     }
     ]
   }
