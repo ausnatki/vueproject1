@@ -196,6 +196,41 @@ export const asyncRoutes = [
       }
     }
     ]
+  },
+  {
+    path: '/compete',
+    component: Layout,
+    redirect: '/compete/list',
+    alwaysShow: true,
+    name: 'CompeteManager',
+    meta: {
+      title: '比赛管理',
+      icon: 'message',
+      roles: ['admin']
+    },
+    children: [{
+      path: 'list',
+      component: () => import('@/views/compete/competeList'),
+      name: 'CompeteList',
+      meta: {
+        title: '比赛列表',
+        icon: 'list',
+        noCache: true,
+        roles: ['admin', 'editor']
+      }
+    },
+    {
+      path: 'add',
+      component: () => import('@/views/compete/competeAdd'),
+      name: 'CompeteAdd',
+      meta: {
+        title: '比赛添加',
+        icon: 'el-icon-s-open',
+        noCache: true,
+        roles: ['admin']
+      }
+    }
+    ]
   }
 
   // 自带模块
