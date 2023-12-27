@@ -107,7 +107,7 @@ export default {
           this.form.Sex = this.form.Sex === 'true'
           CreateEnroll(this.form)
             .then(result => {
-              console.log(result)
+              // console.log(result)
               this.$message({
                 message: result.message,
                 type: 'success'
@@ -121,16 +121,16 @@ export default {
               })
             })
         } else {
-          console.log('error submit!!')
+          // console.log('error submit!!')
           return false
         }
       })
     },
 
     judge() {
-      console.log(this.$route.params.competeid)
+      // console.log(this.$route.params.competeid)
       if (this.$route.params.competeid === undefined) {
-        console.log(this.$route.params.competeid)
+        // console.log(this.$route.params.competeid)
         this.flage = true
       }
     }

@@ -136,7 +136,7 @@ export default {
     getList() {
       getAll().then(result => {
         if (result.date) {
-          console.log(result)
+          // console.log(result)
           this.tableData = result.date
         }
       })

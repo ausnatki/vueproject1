@@ -96,7 +96,7 @@ export default {
         if (valid) {
           CreateCompete(this.form)
             .then(result => {
-              console.log(result)
+              // console.log(result)
               this.$message({
                 message: result.message,
                 type: 'success'
@@ -110,7 +110,7 @@ export default {
               })
             })
         } else {
-          console.log('error submit!!')
+          // console.log('error submit!!')
           return false
         }
       })

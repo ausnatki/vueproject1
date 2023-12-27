@@ -116,7 +116,7 @@ export default {
   },
   created() {
     this.competeid = this.$route.params.competeid
-    console.log('Competition ID:', this.competeid)
+    // console.log('Competition ID:', this.competeid)
     this.judge()
     this.getlist()
   },
@@ -124,7 +124,7 @@ export default {
     reloadTableData() {
       // 当 dialogFlag 变为 false 时重新获取数据
       Get_EnrollList(this.competeid).then(result => {
-        console.log(result)
+        // console.log(result)
         if (result.data) {
           this.tableData = result.data
         }
@@ -136,16 +136,16 @@ export default {
     },
     getlist() {
       Get_EnrollList(this.competeid).then(result => {
-        console.log(result)
+        // console.log(result)
         if (result.data) {
           this.tableData = result.data
         }
       })
     },
     judge() {
-      console.log(this.$route.params.competeid)
+      // console.log(this.$route.params.competeid)
       if (this.$route.params.competeid === undefined) {
-        console.log(this.$route.params.competeid)
+        // console.log(this.$route.params.competeid)
         this.flage = true // 判断是否有比赛值传过来
       }
     },

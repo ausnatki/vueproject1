@@ -43,7 +43,7 @@ export default {
   methods: {
     async getlist() {
       await getAll().then(result => {
-        console.log(result)
+        // console.log(result)
         if (result.date) {
           // console.log(result.date)
           this.List = result.date
