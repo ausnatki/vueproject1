@@ -123,7 +123,9 @@ export default {
       console.log(index, row)
     },
     handleExamine(index, row) {
-      console.log(index, row)
+    //   console.log(index, row)
+    //   console.log(row.id)
+      this.$router.push({ name: 'CompeteExamine', params: { competeid: row.id }})
     },
     handleDelete(index, row) {
       console.log(index, row)

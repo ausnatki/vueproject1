@@ -16,3 +16,30 @@ export function CreateCompete(data) {
     data
   })
 }
+
+// 获取所有报名信息
+export function Get_EnrollList(data) {
+  return request({
+    url: '/api/Compete/Get_EnrollList',
+    method: 'get',
+    params: { data }
+  })
+}
+
+// 比赛报名
+export function CreateEnroll(data) {
+  return request({
+    url: '/api/Compete/Create_Enroll',
+    method: 'post',
+    data
+  })
+}
+
+// 审核
+export function Examin(data) {
+  return request({
+    url: '/api/Compete/Examin',
+    method: 'post',
+    data
+  })
+}

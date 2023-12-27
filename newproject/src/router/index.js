@@ -234,14 +234,50 @@ export const asyncRoutes = [
       path: 'tablelist',
       component: () => import('@/views/compete/compete-table-list'),
       name: 'CompeteTableList',
+      props: true,
       meta: {
         title: '比赛表格',
         icon: 'el-icon-s-claim',
         noCache: true,
         roles: ['admin']
       }
+    },
+    {
+      path: 'examine',
+      component: () => import('@/views/compete/compete-Examine'),
+      name: 'CompeteExamine',
+      hidden: true,
+      props: true,
+      meta: {
+        title: '审核列表',
+        icon: 'list'
+      }
+    },
+    {
+      path: 'enroll',
+      component: () => import('@/views/compete/compete-Enroll'),
+      name: 'CompeteEnroll',
+      hidden: true,
+      props: true,
+      meta: {
+        title: '选手报名',
+        icon: 'list'
+      }
+    },
+    {
+      path: 'oneContent',
+      component: () => import('@/views/compete/compete-one-content'),
+      name: 'CompeteOneContent',
+      hidden: true,
+      props: true
     }
     ]
+  },
+  // 重定向规则
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
   }
 
   // 自带模块

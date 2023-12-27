@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="item in List" :key="item.id" class="compete-box">
+    <div v-for="item in List" :key="item.id" class="compete-box" @click="changepage(item.id)">
       <div class="left">
         <div class="left-img">
           <el-image
@@ -49,6 +49,9 @@ export default {
           this.List = result.date
         }
       })
+    },
+    changepage(id) {
+      this.$router.push({ name: 'CompeteOneContent', params: { competeid: id }})
     }
   }
 }
