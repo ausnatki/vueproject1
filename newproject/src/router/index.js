@@ -126,7 +126,6 @@ export const constantRoutes = [
  */
 // 动态路由规则
 export const asyncRoutes = [
-
   {
     path: '/goods',
     component: Layout,

@@ -75,6 +75,7 @@
             type="danger"
             @click="handleDelete(scope.$index, scope.row)"
           >删除</el-button>
+          <EditCompete v-if="scope.row.dialogFlag" :dialogflag.sync="scope.row.dialogFlag" :fromdata="scope.row" />
         </template>
       </el-table-column>
     </el-table>
@@ -83,18 +84,52 @@
 
 <script>
 import { getAll } from '@/api/compete'
+import EditCompete from '@/views/compete/components/EditCompete.vue'
 export default {
   name: 'CompeteTableList',
+  components: {
+    EditCompete
+  },
   data() {
     return {
       tableData: [],
-      search: ''
+      search: '',
+      dialogFlage: false
     }
   },
-  mounted() {
+  watch: {
+    // 监视 scope.row.dialogFlag 的变化
+    'tableData': {
+      immediate: true,
+      handler: function(newTableData, oldTableData) {
+        // 获取新数据的 dialogFlag
+        console.log('这是我夫组建中的修改')
+        const dialogFlag = newTableData.map(item => item.dialogFlag)
+        console.log(dialogFlag)
+        // 判断是否存在 dialogFlag 为 false 的情况
+        if (dialogFlag.includes(false)) {
+          console.log('已经走到这里了')
+          this.reloadTableData()
+        }
+      },
+      deep: true
+    }
+  },
+  created() {
     this.getList()
   },
   methods: {
+    reloadTableData() {
+      // 当 dialogFlag 变为 false 时重新获取数据
+      getAll().then(result => {
+        console.log(result)
+        // console.log(result)
+        if (result.date) {
+          console.log(result.date)
+          this.tableData = result.date
+        }
+      })
+    },
     getStateLabel(state) {
       switch (state) {
         case 0:
@@ -121,6 +156,7 @@ export default {
     },
     handleEdit(index, row) {
       console.log(index, row)
+      this.$set(this.tableData, index, { ...row, dialogFlag: true })
     },
     handleExamine(index, row) {
     //   console.log(index, row)

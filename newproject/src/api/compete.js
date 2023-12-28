@@ -43,3 +43,12 @@ export function Examin(data) {
     data
   })
 }
+
+// 修改比赛详情
+export function EditCompete(data) {
+  return request({
+    url: '/api/Compete/Edit_Compete',
+    method: 'post',
+    data
+  })
+}
