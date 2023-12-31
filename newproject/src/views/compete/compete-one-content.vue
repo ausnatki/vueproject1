@@ -19,21 +19,20 @@
             <h3>比赛名称:</h3>
           </div>
           <div class="top-right-one-right">
-            <p>青春飞扬，歌唱比赛</p>
-            <p class="font-suffix">-------青春歌唱比赛</p>
+            <p>{{ compete.Name }}</p>
+            <p class="font-suffix">-------{{ compete.Topic }}</p>
           </div>
           <div style="margin: 73px 0;">
             <el-divider content-position="right">比赛名称</el-divider>
           </div>
         </div>
-
         <!-- 比赛主题 -->
         <div class="top-right-two">
           <div class="top-right-two-left">
             <h3>比赛主题:</h3>
           </div>
           <div class="top-right-two-right">
-            <p>早晨还是微弱的太阳，可是到了中午太阳却射出火焰般的光线，让人像是烈火焚身，浑身上下都被烤焦了！我们就在这个时候举行了歌唱比赛。我们都搬着凳子坐在了操场上，排得整整齐齐，看着别人班唱得那么好，我不由得害怕起来，想：我们到底能不能取得冠军呢？</p>
+            <p>{{ compete.Description }}</p>
           </div>
           <div style="margin: 90px 0;">
             <el-divider content-position="right">比赛主题</el-divider>
@@ -45,183 +44,154 @@
             <h3>起止时间:</h3>
           </div>
           <div class="top-right-three-right">
-            <p>2023/12/10-----2023/12/19</p>
+            <p>{{ (compete.StartTime ? compete.StartTime.replace("T", " ") : "") }}-----{{ (compete.EndTime ? compete.EndTime.replace("T", " ") : "") }}</p>
+
           </div>
         </div>
         <div class="top-right-four">
-          <el-button type="primary">主要按钮</el-button>
-          <el-button type="success">成功按钮</el-button>
-          <el-button type="info">信息按钮</el-button>
+          <el-button v-if="!competeState" type="primary" @click="Enroll(competeid)">比赛报名</el-button>
+          <el-button v-if="competeState" type="success" @click="flage=true">查看报名信息</el-button>
         </div>
+        <EnrollVIew
+          v-if="flage"
+          :dialogflag.sync="flage"
+          :name="name"
+          :competelist="competelist"
+          :stage="compete.Stage"
+          :competeid="competeid"
+        />
       </div>
     </div>
     <!-- <el-divider content-position="left">这是分割线</el-divider> -->
     <div class="buttom">
-      <div id="mychartsbox" class="mychartsbox" />
+      <div id="mychartsbox" class="mychartsbox">
+        <mycharts :competeid="competeid.toString()" />
+      </div>
+      <!-- 比赛列表 -->
       <div class="mycompetebox">
-        <div class="mycompete">
+        <div v-for="item,index in competelist" :key="item.ID" class="mycompete">
           <div class="competelist">
             <div class="competelist-img">
               <el-image
-                style="width: 78%; height: 70% ;position: relative; left:9%; top: 18px;"
-                src=""
-                fit="fill"
+                style="width: 78%; height: 73% ; position: relative; left:9%; top: 18px;"
+                :src="`/api/Tool/${item.Img}`"
               />
             </div>
             <div class="competelistcontent">
               <div class="competelisttitle">
-                标题
+                <!--  -->
+                <p style="display: inline-block;">比赛阶段----{{ getStageDisplay(item.Stage) }}</p>
+
+                <p style="display: inline-block;padding: 0 20px; font-size: 10px; font-weight: 400; color: rgb(182, 182, 182);">{{ getStateDisplay(item.State) }}</p>
               </div>
               <div class="competelistbtn">
-                <el-button type="primary">主要按钮</el-button>
-                <el-button type="success">成功按钮</el-button>
-                <el-button type="info">信息按钮</el-button>
+                <el-button type="primary" :disabled="item.state !== 1">比赛投票</el-button>
+                <el-button v-if="roles.includes('admin')" type="warning" @click="flagerc=true,flageIndex=index">比赛管理</el-button>
+                <el-button type="success">比赛结果</el-button>
               </div>
             </div>
           </div>
-          <el-divider content-position="right">初赛</el-divider>
+          <el-divider v-if="item.Stage!=compete.Stage" style="margin: 0px 0px !important;" content-position="right">{{ getStageDisplay(item.Stage) }}</el-divider>
         </div>
-        <div class="mycompete">
-          <div class="competelist">
-            <div class="competelist-img">
-              <el-image
-                style="width: 78%; height: 70% ;position: relative; left:9%; top: 18px;"
-                src=""
-                fit="fill"
-              />
-            </div>
-            <div class="competelistcontent">
-              <div class="competelisttitle">
-                标题
-              </div>
-              <div class="competelistbtn">
-                <el-button type="primary">主要按钮</el-button>
-                <el-button type="success">成功按钮</el-button>
-                <el-button type="info">信息按钮</el-button>
-              </div>
-            </div>
-          </div>
-          <el-divider content-position="right">复赛</el-divider>
-        </div>
-        <div class="mycompete">
-          <div class="competelist">
-            <div class="competelist-img">
-              <el-image
-                style="width: 78%; height: 70% ;position: relative; left:9%; top: 18px;"
-                src=""
-                fit="fill"
-              />
-            </div>
-            <div class="competelistcontent">
-              <div class="competelisttitle">
-                标题
-              </div>
-              <div class="competelistbtn">
-                <el-button type="primary">主要按钮</el-button>
-                <el-button type="success">成功按钮</el-button>
-                <el-button type="info">信息按钮</el-button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <EditRCompete
+          v-if="flagerc"
+          :dialogflag.sync="flagerc"
+          :compete="competelist[flageIndex]"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import echarts from 'echarts'
-
+import { mapGetters } from 'vuex'
+import mycharts from '@/views/compete/components/Carts.vue'
+import { getState } from '@/api/compete'
+import EnrollVIew from '@/views/compete/components/EnrollView.vue'
+import EditRCompete from '@/views/compete/components/EditRegulationCompete.vue'
 export default {
   name: 'CompeteOneContent',
+  components: {
+    mycharts,
+    EnrollVIew,
+    EditRCompete
+  },
   data() {
     return {
-      competeid: 0
+      competeid: 0,
+      compete: {},
+      competelist: [],
+      competeState: '',
+      flage: false, // 这个标志是查看个人信息的
+      flagerc: false, // 这个标志是管理比赛的
+      flageIndex: 0
     }
   },
+  computed: {
+    ...mapGetters([
+      'name',
+      'avatar',
+      'roles'
+    ])
+  },
   created() {
-    this.competeid = this.$route.params.competeid // 这是我的比赛id
+    this.competeid = this.$route.query.competeid // 这是我的比赛id
+    this.stateInit()
   },
   mounted() {
-    this.initChart() // 在组件挂载后初始化图表
+    // this.initChart() // 在组件挂载后初始化图表
   },
   methods: {
-    initChart() {
-      // 虚拟数据
-      const testData = [
-        ['product', 'amount'],
-        ['选手1', 10], // 不再使用引号包裹
-        ['选手2', 20],
-        ['选手3', 30],
-        ['选手4', 12],
-        ['选手5', 50]
-      ]
-
-      const testTopicJsonS = {
-        num: 35 // 根据你的需求修改
+    getStageDisplay(stage) {
+      switch (stage) {
+        case 1:
+          return '初赛'
+        case 2:
+          return '半决赛'
+        case 3:
+          return '决赛'
+        default:
+          return 'Unknown Stage'
       }
-      // 初始化图表
-      const myChart = echarts.init(document.getElementById('mychartsbox'))
-
-      // 配置项
-      const optionDIY = {
-        title: { text: '          投票人数: ' + testTopicJsonS.num },
-        dataset: {
-          source: testData
-        },
-        legend: {
-          height: 10
-        },
-        grid: { containLabel: true },
-        xAxis: { name: '' },
-        yAxis: { type: 'category' },
-        visualMap: {
-          orient: 'horizontal',
-          left: 'center',
-          min: 0,
-          max: 100,
-          text: ['High ticket ', 'Low ticket '],
-          dimension: 1,
-          inRange: {
-            color: ['#65B581', '#FFCE34', '#FD665F']
-            // 如果需要，可以添加更多颜色
-
-          }
-        },
-        series: [
-          {
-            type: 'bar',
-            barWidth: 43,
-            label: {
-              fontSize: 15,
-              fontWeight: 'bold',
-              stack: 'samestack',
-              position: 'insideLeft',
-              formatter: (params) => {
-                // const dataIndex = params.dataIndex
-                const amount = params.value[1] // 假设 'amount' 在第二个位置
-                return `  ${params.name}: ${amount}人   ${amount}`
-              },
-              show: true
-            },
-            encode: {
-              x: 'amount', // 修改这里，对应数据中的 'amount'
-              y: 'product'
-            }
-          }
-        ]
-      }
-
-      // 设置图表配置项
-      myChart.setOption(optionDIY)
-
-      // 窗口大小变化时自适应
-      window.onresize = function() {
-        myChart.resize()
+    },
+    getStateDisplay(state) {
+      switch (state) {
+        case 0:
+          return '未开始'
+        case 1:
+          return '正在比赛中'
+        case 2:
+          return '比赛结束'
+        default:
+          return 'Unknown State'
       }
     },
     Enroll(id) {
+      if (this.competeState) {
+        this.$message({
+          message: '你已经报名无需重复报名',
+          type: 'success'
+        })
+        return
+      }
       this.$router.push({ name: 'CompeteEnroll', params: { competeid: id }})
+    },
+    stateInit() {
+      getState(this.competeid, this.name)
+        .then(response => {
+          if (response.code === 20000) {
+            const dataObject = JSON.parse(response.data)
+            console.log(dataObject)
+            this.compete = dataObject.compete
+            this.competelist = dataObject.rcompete.$values
+            this.competeState = dataObject.competeState
+          } else {
+            // 查询失败，输出错误信息
+            console.error(response.message)
+          }
+        }).catch(error => {
+          console.log(error)
+        })
     }
   }
 }
@@ -279,8 +249,8 @@ export default {
   font-weight: 100 !important;
   font-size: 15px !important;
   position: absolute;
-  width: 100%;
-  left: 147px;
+  width: 200px;
+  left: 100%;
   top: 34px;
 }
 .top-right-two {
@@ -353,7 +323,7 @@ export default {
   display: flex;
   height: 500px;
   margin: 20px 0;
-  border: 1px black solid;
+  /* border: 1px black solid; */
   justify-content: center; /* 将内容水平居中 */
 }
 
@@ -363,14 +333,11 @@ export default {
 
 .mycompetebox{
   flex: 1;
-  display: flex;
-  /* border: 1px black solid; */
-  flex-direction:column;
+  display: -webkit-box;  flex-direction:column;
 }
 
 .mycompete{
  flex:1;
- /* border: 1px black solid; */
 }
 
 .competelist{
@@ -380,11 +347,9 @@ export default {
   margin: 20px;
   height: 75%;
 }
-
-.competelist-img{
+.competelist-img {
   flex: 3;
 }
-
 .competelistcontent{
   flex: 4;
   display: flex;
@@ -400,9 +365,7 @@ export default {
 .competelistbtn{
   flex: 3;
 }
-.line{
-  width: 100%;
-  height: 90px;
-  margin: 0 40px;
+.el-divider--horizontal{
+  margin: 0;
 }
 </style>

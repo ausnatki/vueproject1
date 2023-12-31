@@ -24,13 +24,13 @@
           />
         </el-form-item>
         <el-form-item label="起止时间" prop="StartTime">
-          <el-col :span="11">
-            <el-date-picker v-model="form.startTime" type="date" placeholder="选择日期" style="width: 100%;" />
-          </el-col>
-          <el-col class="line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-date-picker v-model="form.endTime" placeholder="选择时间" style="width: 100%;" />
-          </el-col>
+          <el-date-picker
+            v-model="timearr"
+            type="datetimerange"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :default-time="['12:00:00']"
+          />
         </el-form-item>
         <el-form-item label="比赛说明" prop="Description">
           <el-input v-model="form.description" type="textarea" />
@@ -73,6 +73,7 @@ export default {
         topic: this.fromdata.topic
       },
       formLabelWidth: '150px',
+      timearr: [this.fromdata.startTime, this.fromdata.endTime],
       rules: {
         name: [
           { required: true, message: '请输入名称', trigger: 'blur' },
@@ -84,11 +85,8 @@ export default {
         description: [
           { required: true, message: '请输入描述', trigger: 'blur' }
         ],
-        startTime: [
+        Timearr: [
           { required: true, message: '请输入开始时间', trigger: 'blur' }
-        ],
-        endTime: [
-          { required: true, message: '请输入结束时间', trigger: 'change' }
         ],
         stage: [
           { required: true, message: '请选择阶段', trigger: 'blur' }
@@ -113,6 +111,8 @@ export default {
     onSubmit() {
       this.$refs.form.validate((valid) => {
         if (valid) {
+          this.form.StartTime = this.timearr[0]
+          this.form.EndTime = this.timearr[1]
           EditCompete(this.form)
             .then(result => {
               // console.log(result)

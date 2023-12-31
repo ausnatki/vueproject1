@@ -161,7 +161,7 @@ export default {
     handleExamine(index, row) {
     //   console.log(index, row)
     //   console.log(row.id)
-      this.$router.push({ name: 'CompeteExamine', params: { competeid: row.id }})
+      this.$router.push({ path: '/compete/examine', query: { competeid: row.id }})
     },
     handleDelete(index, row) {
       console.log(index, row)
@@ -174,6 +174,10 @@ export default {
         if (result.date) {
           // console.log(result)
           this.tableData = result.date
+          this.tableData.forEach(element => {
+            element.startTime = element.startTime.replace('T', ' ')
+            element.endTime = element.endTime.replace('T', ' ')
+          })
         }
       })
     }

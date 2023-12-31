@@ -204,8 +204,7 @@ export const asyncRoutes = [
     name: 'CompeteManager',
     meta: {
       title: '比赛管理',
-      icon: 'message',
-      roles: ['admin']
+      icon: 'message'
     },
     children: [{
       path: 'list',
@@ -214,8 +213,7 @@ export const asyncRoutes = [
       meta: {
         title: '比赛列表',
         icon: 'list',
-        noCache: true,
-        roles: ['admin', 'editor']
+        noCache: true
       }
     },
     {
@@ -249,7 +247,8 @@ export const asyncRoutes = [
       props: true,
       meta: {
         title: '审核列表',
-        icon: 'list'
+        icon: 'list',
+        noCache: true
       }
     },
     {
@@ -260,7 +259,8 @@ export const asyncRoutes = [
       props: true,
       meta: {
         title: '选手报名',
-        icon: 'list'
+        icon: 'list',
+        noCache: true
       }
     },
     {
@@ -268,7 +268,12 @@ export const asyncRoutes = [
       component: () => import('@/views/compete/compete-one-content'),
       name: 'CompeteOneContent',
       hidden: true,
-      props: true
+      props: true,
+      meta: {
+        title: '比赛详情',
+        icon: 'el-icon-s-claim',
+        noCache: true
+      }
     }
     ]
   },

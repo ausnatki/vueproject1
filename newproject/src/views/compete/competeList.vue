@@ -18,7 +18,7 @@
           <span>{{ item.description }}</span>
         </div>
         <div class="right-Time">
-          <span>{{ item.startTime }} ---- {{ item.endTime }}</span>
+          <span>{{ item.startTime.replace("T"," ") }} ---- {{ item.endTime.replace("T"," ") }}</span>
         </div>
       </div>
       <div class="right-top">
@@ -51,7 +51,7 @@ export default {
       })
     },
     changepage(id) {
-      this.$router.push({ name: 'CompeteOneContent', params: { competeid: id }})
+      this.$router.push({ path: '/compete/oneContent', query: { competeid: id }})
     }
   }
 }

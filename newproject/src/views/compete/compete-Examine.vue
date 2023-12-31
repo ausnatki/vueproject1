@@ -1,6 +1,5 @@
 <template>
   <div class="main-box">
-    <ErrorPage v-if="flage" />
     <div v-if="!flage">
       <el-input v-model="search" style="width: 300px; padding: 0 10px 10px 0;" placeholder="请输入内容" />
       <el-button type="primary" icon="el-icon-search">搜索</el-button>
@@ -82,12 +81,10 @@
 
 <script>
 import { Get_EnrollList } from '@/api/compete'
-import ErrorPage from '@/views/error-page/404.vue'
 import ExaminDialog from '@/views/compete/components/ExaminDialog.vue'
 export default {
   name: 'CompeteExamine',
   components: {
-    ErrorPage,
     ExaminDialog
   },
   data() {
@@ -115,7 +112,8 @@ export default {
     }
   },
   created() {
-    this.competeid = this.$route.params.competeid
+    this.competeid = this.$route.query.competeid // 这是我的比赛id
+
     // console.log('Competition ID:', this.competeid)
     this.judge()
     this.getlist()
@@ -144,7 +142,7 @@ export default {
     },
     judge() {
       // console.log(this.$route.params.competeid)
-      if (this.$route.params.competeid === undefined) {
+      if (this.$route.query.competeid === undefined) {
         // console.log(this.$route.params.competeid)
         this.flage = true // 判断是否有比赛值传过来
       }

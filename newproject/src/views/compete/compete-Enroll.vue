@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Upload from '@/views/compete/components/Uploadimg.vue'
 import ErrorPage from '@/views/error-page/404.vue'
 import { CreateEnroll } from '@/api/compete'
@@ -89,8 +90,16 @@ export default {
       flage: false
     }
   },
+  computed: {
+    ...mapGetters([
+      'name',
+      'avatar',
+      'roles'
+    ])
+  },
   created() {
     this.judge()
+    console.log(this.name)
   },
   methods: {
     onSubmit() {
@@ -105,7 +114,7 @@ export default {
             this.form.Age = age
           }
           this.form.Sex = this.form.Sex === 'true'
-          CreateEnroll(this.form)
+          CreateEnroll(this.form, this.name)
             .then(result => {
               // console.log(result)
               this.$message({

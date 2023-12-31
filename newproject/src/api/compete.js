@@ -27,11 +27,12 @@ export function Get_EnrollList(data) {
 }
 
 // 比赛报名
-export function CreateEnroll(data) {
+export function CreateEnroll(data, userName) {
   return request({
     url: '/api/Compete/Create_Enroll',
     method: 'post',
-    data
+    data: data,
+    params: { UserName: userName }
   })
 }
 
@@ -48,6 +49,42 @@ export function Examin(data) {
 export function EditCompete(data) {
   return request({
     url: '/api/Compete/Edit_Compete',
+    method: 'post',
+    data
+  })
+}
+
+// 修改比赛详情
+export function getState(competeid, name) {
+  return request({
+    url: '/api/Compete/Get_Stateinfo',
+    method: 'get',
+    params: { competeid, name }
+  })
+}
+
+// 用户查看自己报名信息
+export function GetEnrollByName(name, cid) {
+  return request({
+    url: '/api/Compete/Get_EnrollByName',
+    method: 'get',
+    params: { name, cid }
+  })
+}
+
+// 用户通过name和比赛详情表id查询自己的歌曲
+export function GetSongs(name, cid) {
+  return request({
+    url: '/api/Compete/Get_Songs',
+    method: 'get',
+    params: { name, cid }
+  })
+}
+
+// 用户修改自己的参赛歌曲
+export function EditSongs(data) {
+  return request({
+    url: '/api/Compete/Edit_Songe',
     method: 'post',
     data
   })

@@ -17,14 +17,14 @@
       <el-form-item label="比赛图片">
         <upload v-model="form.Img" />
       </el-form-item>
-      <el-form-item label="起止时间" prop="StartTime">
-        <el-col :span="11">
-          <el-date-picker v-model="form.StartTime" type="date" placeholder="选择日期" style="width: 100%;" />
-        </el-col>
-        <el-col class="line" :span="2">-</el-col>
-        <el-col :span="11">
-          <el-date-picker v-model="form.EndTime" placeholder="选择时间" style="width: 100%;" />
-        </el-col>
+      <el-form-item label="起止时间" prop="Timearr">
+        <el-date-picker
+          v-model="timearr"
+          type="datetimerange"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="['12:00:00']"
+        />
       </el-form-item>
       <el-form-item label="比赛说明" prop="Description">
         <el-input v-model="form.Description" type="textarea" />
@@ -57,8 +57,10 @@ export default {
         Stage: '',
         Count: '1',
         Img: '',
-        State: '0'
+        State: '0',
+        timearr: []
       },
+      timearr: [],
       rules: {
         Name: [
           { required: true, message: '请输入名称', trigger: 'blur' },
@@ -72,13 +74,17 @@ export default {
           { required: true, message: '请输入描述', trigger: 'blur' }
 
         ],
-        StartTime: [
-          { required: true, message: '请输入开始时间', trigger: 'change' }
-
-        ],
-        EndTime: [
-          { required: true, message: '请输入结束时间', trigger: 'change' }
-
+        Timearr: [
+          {
+            type: 'array',
+            required: true,
+            message: '请选择日期区间',
+            fields: {
+              // tpye类型试情况而定,所以如果返回的是date就改成date
+              0: { type: 'string', required: true, message: '请选择开始日期' },
+              1: { type: 'string', required: true, message: '请选择结束日期' }
+            }
+          }
         ],
         Stage: [
           { required: true, message: '请选择阶段', trigger: 'blur' }
@@ -92,27 +98,32 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          CreateCompete(this.form)
-            .then(result => {
+      this.$nextTick(() => {
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+          // 处理时间逻辑
+            this.form.StartTime = this.timearr[0]
+            this.form.EndTime = this.timearr[1]
+            CreateCompete(this.form)
+              .then(result => {
               // console.log(result)
-              this.$message({
-                message: result.message,
-                type: 'success'
+                this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                this.$refs.form.resetFields()
               })
-              this.$refs.form.resetFields()
-            })
-            .catch(error => {
-              this.$message({
-                message: error.message,
-                type: 'error'
+              .catch(error => {
+                this.$message({
+                  message: error.message,
+                  type: 'error'
+                })
               })
-            })
-        } else {
+          } else {
           // console.log('error submit!!')
-          return false
-        }
+            return false
+          }
+        })
       })
     }
   }
