@@ -43,13 +43,12 @@
         </el-form-item>
 
         <el-form-item v-for="(item,index) in songs" :key="item.ID" :label="getStage(index+1)" :label-width="formLabelWidth">
-          <el-input v-model="item.SongName" placeholder="请填写比赛作品" :disabled="competelist[index].State !== 0" />
+          <el-input v-model="item.songName" style="width: 80%;" placeholder="请填写比赛作品" :disabled="competelist[index].State !== 0" />
+          <el-button v-if="competelist[index].State === 0" :disabled="competelist[index].State !== 0" size="mini" style="margin-left: 10px;" type="primary" icon="el-icon-edit" circle @click="onSubmit(item)" />
+          <el-button v-if="competelist[index].State !== 0" :disabled="competelist[index].State !== 0" size="mini" style="margin-left: 10px;" type="success" icon="el-icon-check" circle @click="onSubmit(item)" />
         </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
 
-        <el-button v-if="!songs === ''" type="primary" @click="onsubmit()">提交歌曲</el-button>
-      </div>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -100,26 +99,38 @@ export default {
     this.InitSongs()
   },
   methods: {
-    onSubmit() {
-      EditSongs().then(result => {
-        console.log(result)
-        if (result.data) {
-          if (result.data.code === 20000) {
-            this.$message({
-              message: result.data.message,
-              tyep: 'success'
-            })
-          } else {
-            this.$message({
-              message: result.data.message,
-              tyep: 'error'
-            })
+    // 修改歌曲
+    onSubmit(data) {
+      this.$confirm('是否确定修改', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        EditSongs(data).then(result => {
+          console.log(result)
+          if (result.code) {
+            if (result.code === 20000) {
+              this.$message({
+                message: '修改成功',
+                type: 'success'
+              })
+            } else {
+              this.$message({
+                message: '修改失败',
+                type: 'error'
+              })
+            }
           }
-        }
-      }).catch(error => {
+        }).catch(error => {
+          this.$message({
+            message: error.data.message,
+            type: 'error'
+          })
+        })
+      }).catch(() => {
         this.$message({
-          message: error.data.message,
-          tyep: 'error'
+          type: 'info',
+          message: '已取消删除'
         })
       })
     },

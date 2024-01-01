@@ -17,7 +17,7 @@
       <el-form-item label="比赛图片">
         <upload v-model="form.Img" />
       </el-form-item>
-      <el-form-item label="起止时间" prop="Timearr">
+      <el-form-item label="起止时间">
         <el-date-picker
           v-model="timearr"
           type="datetimerange"
@@ -73,18 +73,6 @@ export default {
         Description: [
           { required: true, message: '请输入描述', trigger: 'blur' }
 
-        ],
-        Timearr: [
-          {
-            type: 'array',
-            required: true,
-            message: '请选择日期区间',
-            fields: {
-              // tpye类型试情况而定,所以如果返回的是date就改成date
-              0: { type: 'string', required: true, message: '请选择开始日期' },
-              1: { type: 'string', required: true, message: '请选择结束日期' }
-            }
-          }
         ],
         Stage: [
           { required: true, message: '请选择阶段', trigger: 'blur' }

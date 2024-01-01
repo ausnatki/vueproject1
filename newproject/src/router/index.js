@@ -274,6 +274,18 @@ export const asyncRoutes = [
         icon: 'el-icon-s-claim',
         noCache: true
       }
+    },
+    {
+      path: 'voting',
+      component: () => import('@/views/compete/voting'),
+      name: 'Voting',
+      hidden: true,
+      props: true,
+      meta: {
+        title: '投票界面',
+        icon: 'el-icon-s-claim',
+        noCache: true
+      }
     }
     ]
   },

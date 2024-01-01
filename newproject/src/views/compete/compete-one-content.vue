@@ -7,7 +7,7 @@
         <div class="top-left-img">
           <el-image
             style="width: 300px; height: 200px ;position: relative; left:12%; top: 50px;"
-            :src="`api/Tool/20231228111450.jpg`"
+            :src="`api/Tool/${compete.Img}`"
             fit="fill"
           />
         </div>
@@ -85,7 +85,7 @@
                 <p style="display: inline-block;padding: 0 20px; font-size: 10px; font-weight: 400; color: rgb(182, 182, 182);">{{ getStateDisplay(item.State) }}</p>
               </div>
               <div class="competelistbtn">
-                <el-button type="primary" :disabled="item.state !== 1">比赛投票</el-button>
+                <el-button type="primary" :disabled="item.State !== 1">比赛投票</el-button>
                 <el-button v-if="roles.includes('admin')" type="warning" @click="flagerc=true,flageIndex=index">比赛管理</el-button>
                 <el-button type="success">比赛结果</el-button>
               </div>
@@ -96,6 +96,7 @@
         <EditRCompete
           v-if="flagerc"
           :dialogflag.sync="flagerc"
+          :competestage="compete.Stage"
           :compete="competelist[flageIndex]"
         />
       </div>
@@ -133,6 +134,14 @@ export default {
       'avatar',
       'roles'
     ])
+  },
+  watch: {
+    flagerc(newVal) {
+      this.stateInit()
+    },
+    flage() {
+      this.stateInit()
+    }
   },
   created() {
     this.competeid = this.$route.query.competeid // 这是我的比赛id
