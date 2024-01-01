@@ -8,14 +8,19 @@ import echarts from 'echarts'
 export default {
   name: 'CompeteCarts',
   props: {
-    competeid: {
-      type: String,
+    competelist: {
+      type: Array,
       required: true
     }
   },
   data() {
     return {
-      tcompeteid: ''
+    }
+  },
+  watch: {
+    competelist(newVal) {
+      console.log('监听到了')
+      this.initChart()
     }
   },
   mounted() {
@@ -23,29 +28,22 @@ export default {
   },
   methods: {
     initChart() {
-      // 虚拟数据
-      const testData = [
-        ['product', 'amount'],
-        ['选手1', 10],
-        ['选手2', 20],
-        ['选手3', 30],
-        ['选手4', 12],
-        ['选手5', 50],
-        ['选手6', 90]
-      ]
-
-      const testTopicJsonS = {
-        num: 35
-      }
-
+      const tdata = this.competelist.map(element => ({ product: element.name, amount: element.count }))
+      // 取前十个
+      const mydata = tdata.slice(0, 10).reverse()
+      let number = 0
+      tdata.forEach(element => {
+        number += element.amount
+      })
       // 初始化图表
       const myChart = echarts.init(document.getElementById('mycharts'))
-
+      const cnt = mydata.length
+      const maxamount = mydata[cnt - 1].amount
       // 配置项
       const optionDIY = {
-        title: { text: '          投票人数: ' + testTopicJsonS.num },
+        title: { text: '          投票人数: ' + number },
         dataset: {
-          source: testData
+          source: mydata
         },
         legend: {
           height: 10
@@ -57,7 +55,7 @@ export default {
           orient: 'horizontal',
           left: 'center',
           min: 0,
-          max: 100,
+          max: maxamount,
           text: ['High ticket ', 'Low ticket '],
           dimension: 1,
           inRange: {
@@ -74,14 +72,14 @@ export default {
               stack: 'samestack',
               position: 'insideLeft',
               formatter: (params) => {
-                const amount = params.value[1]
+                const amount = params.data.amount
                 return `  ${amount}票`
               },
               show: true
             },
             encode: {
               x: 'amount',
-              y: 'product'
+              y: 'name'
             }
           }
         ]

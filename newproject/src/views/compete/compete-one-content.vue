@@ -65,11 +65,12 @@
     <!-- <el-divider content-position="left">这是分割线</el-divider> -->
     <div class="buttom">
       <div id="mychartsbox" class="mychartsbox">
-        <mycharts :competeid="competeid.toString()" />
+        <!-- 这里是我的图表部分 -->
+        <mycharts v-if="mychartsdata !== ''" :competelist="mychartsdata" />
       </div>
       <!-- 比赛列表 -->
       <div class="mycompetebox">
-        <div v-for="item,index in competelist" :key="item.ID" class="mycompete">
+        <div v-for="item,index in competelist" :key="item.ID" class="mycompete" @click="getcharts(item.ID)">
           <div class="competelist">
             <div class="competelist-img">
               <el-image
@@ -81,18 +82,35 @@
               <div class="competelisttitle">
                 <!--  -->
                 <p style="display: inline-block;">比赛阶段----{{ getStageDisplay(item.Stage) }}</p>
-
                 <p style="display: inline-block;padding: 0 20px; font-size: 10px; font-weight: 400; color: rgb(182, 182, 182);">{{ getStateDisplay(item.State) }}</p>
               </div>
               <div class="competelistbtn">
-                <el-button type="primary" :disabled="item.State !== 1">比赛投票</el-button>
+                <el-button type="primary" :disabled="item.State !== 1" @click="Vote(item.ID)">比赛投票</el-button>
                 <el-button v-if="roles.includes('admin')" type="warning" @click="flagerc=true,flageIndex=index">比赛管理</el-button>
-                <el-button type="success">比赛结果</el-button>
+                <el-button type="success" @click="getResult(item.ID),resultflage=true">比赛结果</el-button>
               </div>
             </div>
           </div>
           <el-divider v-if="item.Stage!=compete.Stage" style="margin: 0px 0px !important;" content-position="right">{{ getStageDisplay(item.Stage) }}</el-divider>
         </div>
+
+        <!-- 这里是我的结果表格 -->
+        <el-dialog title="收货地址" :visible.sync="resultflage">
+          <el-table :data="resulttable">
+            <el-table-column label="排名">
+              <template slot-scope="scope">
+                <span v-if="scope.$index>2">{{ scope.$index + 1 }}</span>
+                <img v-if="scope.$index===0" src="./img/0001.png" alt="" style="width: 20px; height: 20px;">
+                <img v-if="scope.$index===1" src="./img/0002.png" alt="" style="width: 20px; height: 20px;">
+                <img v-if="scope.$index===2" src="./img/0003.png" alt="" style="width: 20px; height: 20px;">
+              </template>
+            </el-table-column>
+            <el-table-column property="name" label="姓名" width="200" />
+            <el-table-column property="iphone" label="电话" />
+            <el-table-column property="songnage" label="参赛曲目" />
+            <el-table-column property="count" label="得票数" />
+          </el-table>
+        </el-dialog>
         <EditRCompete
           v-if="flagerc"
           :dialogflag.sync="flagerc"
@@ -110,6 +128,7 @@ import mycharts from '@/views/compete/components/Carts.vue'
 import { getState } from '@/api/compete'
 import EnrollVIew from '@/views/compete/components/EnrollView.vue'
 import EditRCompete from '@/views/compete/components/EditRegulationCompete.vue'
+import { GetResult } from '@/api/vote'
 export default {
   name: 'CompeteOneContent',
   components: {
@@ -125,7 +144,10 @@ export default {
       competeState: '',
       flage: false, // 这个标志是查看个人信息的
       flagerc: false, // 这个标志是管理比赛的
-      flageIndex: 0
+      flageIndex: 0,
+      resulttable: '',
+      resultflage: false,
+      mychartsdata: ''
     }
   },
   computed: {
@@ -148,7 +170,6 @@ export default {
     this.stateInit()
   },
   mounted() {
-    // this.initChart() // 在组件挂载后初始化图表
   },
   methods: {
     getStageDisplay(stage) {
@@ -194,12 +215,37 @@ export default {
             this.compete = dataObject.compete
             this.competelist = dataObject.rcompete.$values
             this.competeState = dataObject.competeState
+            this.getcharts(this.competelist[0].ID)
           } else {
             // 查询失败，输出错误信息
             console.error(response.message)
           }
         }).catch(error => {
           console.log(error)
+        })
+    },
+    Vote(id) {
+      this.$router.push({ path: '/compete/voting', query: { competeid: id }})
+    },
+    getResult(id) {
+      GetResult(id)
+        .then(result => {
+          console.log(result)
+          this.resulttable = result.result
+        })
+        .catch(response => {
+          console.error(response)
+        })
+    },
+    getcharts(id) {
+      GetResult(id)
+        .then(result => {
+          console.log('我点击了', result.result)
+          this.mychartsdata = result.result
+          this.$forceUpdate()
+        })
+        .catch(response => {
+          console.error(response)
         })
     }
   }
@@ -347,6 +393,11 @@ export default {
 
 .mycompete{
  flex:1;
+ transition: transform 0.5s, box-shadow 0.5s;
+}
+
+.mycompete:hover{
+  transform: translateX(-10px);
 }
 
 .competelist{

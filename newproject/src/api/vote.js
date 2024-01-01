@@ -36,3 +36,14 @@ export function GetCompete(competeid) {
   })
 }
 
+// 通过competeid查询结果
+export function GetResult(competeid) {
+  return request({
+    url: '/api/Voting/GetResult',
+    method: 'get',
+    params: {
+      competeid
+    }
+  })
+}
+
