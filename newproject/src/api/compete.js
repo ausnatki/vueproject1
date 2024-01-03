@@ -89,3 +89,11 @@ export function EditSongs(data) {
     data
   })
 }
+
+// 获取我的大屏信息
+export function GetDashboard() {
+  return request({
+    url: '/api/Values/getDashboard',
+    method: 'get'
+  })
+}
