@@ -1,14 +1,31 @@
 <template>
   <el-carousel direction="vertical" :autoplay="false">
-    <el-carousel-item v-for="item in 3" :key="item">
+    <el-carousel-item v-for="item in mydata" :key="item.name">
       <el-image
         style="width: 100%; height: 100%;"
-        :src="`api/Tool/0001.png`"
+        :src="`api/Tool/${item.c.img}`"
         fit="fill"
+        @click="onSubmit(item.c.compete_ID)"
       />
     </el-carousel-item>
   </el-carousel>
 </template>
+
+<script>
+export default {
+  props: {
+    mydata: {
+      type: [Array, Object],
+      required: true
+    }
+  },
+  methods: {
+    onSubmit(id) {
+      this.$router.push({ path: '/compete/oneContent', query: { competeid: id }})
+    }
+  }
+}
+</script>
 
   <style>
     .el-carousel__item h3 {

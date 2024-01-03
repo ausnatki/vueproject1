@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="top-right-four">
-          <el-button v-if="!competeState" type="primary" @click="Enroll(competeid)">比赛报名</el-button>
+          <el-button v-if="!competeState" type="primary" :disabled="compete.State!==0" @click="Enroll(competeid)">比赛报名</el-button>
           <el-button v-if="competeState" type="success" @click="flage=true">查看报名信息</el-button>
         </div>
         <EnrollVIew

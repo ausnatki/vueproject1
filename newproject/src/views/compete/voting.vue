@@ -24,7 +24,7 @@
           <el-card :body-style="{ padding: '0px', marginBottom: '1px' }">
             <img
               style="width: 230px; height: 200px ;"
-              :src="`api/Tool/20231226001604.jpg`"
+              :src="`api/Tool/${item.img}`"
               fit="fill"
             >
             <div style="padding: 14px;">

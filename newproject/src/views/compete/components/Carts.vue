@@ -30,7 +30,7 @@ export default {
     initChart() {
       const tdata = this.competelist.map(element => ({ product: element.name, amount: element.count }))
       // 取前十个
-      const mydata = tdata.slice(0, 10).reverse()
+      const mydata = tdata.slice(0, 6).reverse()
       let number = 0
       tdata.forEach(element => {
         number += element.amount
@@ -41,7 +41,7 @@ export default {
       const maxamount = mydata[cnt - 1].amount
       // 配置项
       const optionDIY = {
-        title: { text: '          投票人数: ' + number },
+        title: { text: '          投票数: ' + number },
         dataset: {
           source: mydata
         },
