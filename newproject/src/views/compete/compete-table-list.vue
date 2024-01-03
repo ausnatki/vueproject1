@@ -47,13 +47,13 @@
       </el-table-column>
       <el-table-column
         prop="startTime"
-        label="开始时间"
+        label="报名预计截止时间"
         min-width="180"
         show-overflow-tooltip
       />
       <el-table-column
         prop="endTime"
-        label="结束时间"
+        label="截止时间"
         min-width="180"
         show-overflow-tooltip
       />
@@ -176,7 +176,6 @@ export default {
           this.tableData = result.date
           this.tableData.forEach(element => {
             element.startTime = element.startTime.replace('T', ' ')
-            element.endTime = element.endTime.replace('T', ' ')
           })
         }
       })

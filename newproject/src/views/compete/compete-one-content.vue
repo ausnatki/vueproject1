@@ -41,10 +41,10 @@
         <!-- 起止时间 -->
         <div class="top-right-three">
           <div class="top-right-three-left">
-            <h3>起止时间:</h3>
+            <h3>报名截止时间:</h3>
           </div>
           <div class="top-right-three-right">
-            <p>{{ (compete.StartTime ? compete.StartTime.replace("T", " ") : "") }}-----{{ (compete.EndTime ? compete.EndTime.replace("T", " ") : "") }}</p>
+            <p>{{ (compete.StartTime ? compete.StartTime.replace("T", " ") : "") }}</p>
 
           </div>
         </div>
@@ -66,7 +66,10 @@
     <div class="buttom">
       <div id="mychartsbox" class="mychartsbox">
         <!-- 这里是我的图表部分 -->
-        <mycharts v-if="mychartsdata !== ''" :competelist="mychartsdata" />
+        <div v-if="mychartsdata === ''" style="width: 100%; height: 100%;position: relative;">
+          <h2 style="font-weight: 700;position: absolute; top: 45%;left: 45%; font-size: 30px;font-style: italic;color: rgb(224, 224, 224); ">暂无数据</h2>
+        </div>
+        <mycharts v-if="mychartsdata !== '' " :competelist="mychartsdata" />
       </div>
       <!-- 比赛列表 -->
       <div class="mycompetebox">
@@ -87,7 +90,7 @@
               <div class="competelistbtn">
                 <el-button type="primary" :disabled="item.State !== 1" @click="Vote(item.ID)">比赛投票</el-button>
                 <el-button v-if="roles.includes('admin')" type="warning" @click="flagerc=true,flageIndex=index">比赛管理</el-button>
-                <el-button type="success" @click="getResult(item.ID),resultflage=true">比赛结果</el-button>
+                <el-button type="success" @click="getResult(item.ID),resultflage=true,passcount=item.PassCount">比赛结果</el-button>
               </div>
             </div>
           </div>
@@ -95,7 +98,7 @@
         </div>
 
         <!-- 这里是我的结果表格 -->
-        <el-dialog title="收货地址" :visible.sync="resultflage">
+        <el-dialog title="投票结果" :visible.sync="resultflage">
           <el-table :data="resulttable">
             <el-table-column label="排名">
               <template slot-scope="scope">
@@ -109,6 +112,11 @@
             <el-table-column property="iphone" label="电话" />
             <el-table-column property="songnage" label="参赛曲目" />
             <el-table-column property="count" label="得票数" />
+            <el-table-column label="是否晋级">
+              <template slot-scope="scope">
+                <img v-if="scope.$index<passcount" src="./img/00010.png" style="width: 20px; height: 20px;" alt="">
+              </template>
+            </el-table-column>
           </el-table>
         </el-dialog>
         <EditRCompete
@@ -129,6 +137,7 @@ import { getState } from '@/api/compete'
 import EnrollVIew from '@/views/compete/components/EnrollView.vue'
 import EditRCompete from '@/views/compete/components/EditRegulationCompete.vue'
 import { GetResult } from '@/api/vote'
+
 export default {
   name: 'CompeteOneContent',
   components: {
@@ -147,7 +156,8 @@ export default {
       flageIndex: 0,
       resulttable: '',
       resultflage: false,
-      mychartsdata: ''
+      mychartsdata: '',
+      passcount: ''
     }
   },
   computed: {
@@ -211,7 +221,7 @@ export default {
         .then(response => {
           if (response.code === 20000) {
             const dataObject = JSON.parse(response.data)
-            console.log(dataObject)
+            console.log('这是我的相关信息', dataObject)
             this.compete = dataObject.compete
             this.competelist = dataObject.rcompete.$values
             this.competeState = dataObject.competeState
@@ -241,7 +251,9 @@ export default {
       GetResult(id)
         .then(result => {
           console.log('我点击了', result.result)
-          this.mychartsdata = result.result
+          const ttt = result.result
+          console.log(ttt.length)
+          if (ttt.length !== 0) { this.mychartsdata = result.result }
           this.$forceUpdate()
         })
         .catch(response => {

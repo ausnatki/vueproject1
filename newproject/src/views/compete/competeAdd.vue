@@ -1,6 +1,6 @@
 <template>
   <div class="main-box">
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="form" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="比赛名称" prop="Name">
         <el-input v-model="form.Name" />
       </el-form-item>
@@ -17,13 +17,11 @@
       <el-form-item label="比赛图片">
         <upload v-model="form.Img" />
       </el-form-item>
-      <el-form-item label="起止时间">
+      <el-form-item label="预计报名截止时间">
         <el-date-picker
-          v-model="timearr"
-          type="datetimerange"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :default-time="['12:00:00']"
+          v-model="form.StartTime"
+          type="datetime"
+          placeholder="选择日期时间"
         />
       </el-form-item>
       <el-form-item label="比赛说明" prop="Description">
@@ -53,14 +51,12 @@ export default {
         Topic: '',
         Description: '',
         StartTime: '',
-        EndTime: '',
         Stage: '',
         Count: '1',
         Img: '',
-        State: '0',
-        timearr: []
+        State: '0'
       },
-      timearr: [],
+      timearr: '',
       rules: {
         Name: [
           { required: true, message: '请输入名称', trigger: 'blur' },
@@ -89,9 +85,6 @@ export default {
       this.$nextTick(() => {
         this.$refs.form.validate((valid) => {
           if (valid) {
-          // 处理时间逻辑
-            this.form.StartTime = this.timearr[0]
-            this.form.EndTime = this.timearr[1]
             CreateCompete(this.form)
               .then(result => {
               // console.log(result)

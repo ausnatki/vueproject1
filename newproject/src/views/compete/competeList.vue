@@ -18,11 +18,11 @@
           <span>{{ item.description }}</span>
         </div>
         <div class="right-Time">
-          <span>{{ item.startTime.replace("T"," ") }} ---- {{ item.endTime.replace("T"," ") }}</span>
+          <span>{{ item.startTime.replace("T"," ") }}</span>
         </div>
       </div>
-      <div class="right-top">
-        <span>{{ item.state }}</span>
+      <div id="State" ref="State" class="right-top">
+        <span>{{ getState(item.state) }}</span>
       </div>
     </div>
   </div>
@@ -52,6 +52,41 @@ export default {
     },
     changepage(id) {
       this.$router.push({ path: '/compete/oneContent', query: { competeid: id }})
+    },
+    getState(id) {
+      switch (id) {
+        case 0:
+          return '未开始'
+        case 1:
+          return '进行中'
+        case 2:
+          return '结束'
+        default:
+          return '错误'
+      }
+    },
+    stateStyle(id) {
+      let colorstyle = ''
+      switch (id) {
+        case 0:
+          colorstyle = '80px solid #246ab1'
+          break
+        case 1:
+          colorstyle = '80px solid #67C23A'
+          break
+        case 2:
+          colorstyle = '80px solid #848586'
+          break
+        default:
+          colorstyle = '80px solid #f90505'
+      }
+      console.log(colorstyle)
+      this.$nextTick(() => {
+        if (this.$refs.State) {
+          this.$refs.State.style.borderTopColor = colorstyle
+        }
+      })
+      // document.getElementById('State').style.borderTopColor = colorstyle
     }
   }
 }
@@ -134,7 +169,6 @@ export default {
   width: 100px; /* 调整宽度 */
   height: 80px; /* 调整高度 */
   float: right;
-
 }
 
 .right-top::before {
@@ -144,7 +178,7 @@ export default {
   left: 0;
   width: 0;
   height: 0;
-  border-top: 80px solid #67C23A; /* 调整三角形高度 */
+  border-top: 80px solid #079f23; /* 调整三角形高度 */
   border-left: 100px solid transparent; /* 调整三角形宽度 */
   border-radius: 0px 10px 0px 0px;
   filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.3)); /* 调整阴影参数 */
@@ -156,6 +190,7 @@ export default {
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   color:#424346;
   top: 20px;
+  font-size: 15px;
   left: 55px; /* 调整文字位置 */
   transform: rotate(45deg); /* 旋转文字 */
 }

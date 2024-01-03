@@ -30,6 +30,7 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             :default-time="['12:00:00']"
+            :disabled="true"
           />
         </el-form-item>
         <el-form-item label="比赛说明" prop="Description">
